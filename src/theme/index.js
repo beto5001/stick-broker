@@ -152,23 +152,8 @@ export const theme = createTheme({
       disabled: 'rgba(55, 65, 81, 0.26)'
     },
     background: {
-      default: '#e8ecf4',
+      default: '#F9FAFC',
       paper: '#FFFFFF'
-    },
-    reguaPrimary: {
-      main: '#FFA500',
-      dark: '#FF9000',
-      contrastText: '#ffffff'
-    },
-    reguaSecondary: {
-      main: '#011264',
-      dark: '#01129F',
-      contrastText: '#ffffff'
-    },
-    reguaInfo: {
-      main: '#E5E5E5',
-      dark: '#E5E5DF',
-      contrastText: '#464646'
     },
     divider: '#E6E8F0',
     primary: {

@@ -1,12 +1,12 @@
 import Head from 'next/head'
 import { useState } from 'react'
+import { DashboardLayout } from '../components/dashboard-layout';
 import SButton from '../infra/strtucture/buttons/SButton';
 import styles from '../styles/Home.module.css'
 
-export default function HomeDoGi() {
+const HomeDoGi = () => {
 
-  const [textoDoContrato, setTextoDoContrato] = useState(`
-   Bunda`);
+  const [textoDoContrato, setTextoDoContrato] = useState(`Bunda {{nome} {{uf}} {{cpf}} {{idade}}`);
 
   const [cliente, setCliente] = useState({
     nome: 'Gian Silva',
@@ -54,3 +54,11 @@ export default function HomeDoGi() {
     </div>
   )
 }
+
+HomeDoGi.getLayout = (page) => (
+  <DashboardLayout>
+    {page}
+  </DashboardLayout>
+);
+
+export default HomeDoGi;
