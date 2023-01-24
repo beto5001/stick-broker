@@ -6,7 +6,8 @@ import styles from '../styles/Home.module.css'
 
 const HomeDoGi = () => {
 
-  const [textoDoContrato, setTextoDoContrato] = useState(`Bunda {{nome} {{uf}} {{cpf}} {{idade}}`);
+  const [textoDoContrato, setTextoDoContrato] = 
+    useState(`Bunda {{nome} {{uf}} {{cpf}} {{idade}}`);
 
   const [cliente, setCliente] = useState({
     nome: 'Gian Silva',
