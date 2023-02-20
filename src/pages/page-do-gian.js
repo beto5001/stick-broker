@@ -1,44 +1,61 @@
 import { AttachFile } from '@mui/icons-material';
-import { Button, Card, Box, CardHeader, CardContent, Divider, Container} from '@mui/material';
-import Head from 'next/head'
-import { useState } from 'react'
+import { Box, Button, Card, CardContent, CardHeader, Divider } from '@mui/material';
+import Head from 'next/head';
+import { useState } from 'react';
 import { DashboardLayout } from '../components/dashboard-layout';
+import FormBuilder from '../components/form/form-builder';
 
 const HomeDoGi = () => {
 
   const [textoDoContrato, setTextoDoContrato] = useState("Faça o upload do arquivo.");
+  const [nomePropriedades, setNomePropriedades] = useState([]);
 
-  const [cliente, setCliente] = useState();
+  const handleTextCallBack = (novosDadosContrato) => {
 
-  const substuirDadosDoContrato = () => {
     setTextoDoContrato((textoAtualDoContrato) => {
 
-      Object.keys(cliente).map((cadaNomeDaProprierade) => {
+      Object.keys(novosDadosContrato).map((cadaNomeDaProprierade) => {
         textoAtualDoContrato = textoAtualDoContrato.replace(
-          `{{${cadaNomeDaProprierade}}}`, cliente[cadaNomeDaProprierade]
+          `{{${cadaNomeDaProprierade}}}`, novosDadosContrato[cadaNomeDaProprierade]
         );
       });
-      
+
       return textoAtualDoContrato;
     });
   }
 
   const handleUpload = async (e) => {
+
+    if (e == null) {
+      setTextoDoContrato(null);
+      setNomePropriedades([]);
+      return;
+    }
+
     e.preventDefault();
     const reader = new FileReader();
-    reader.onload = async (e) => { 
+    reader.onload = async (e) => {
       const text = (e.target.result);
       setTextoDoContrato(text);
+      handleInputCreation(text);
     };
     reader.readAsText(e.target.files[0]);
   }
 
   const handleInputCreation = (text) => {
-    //Ler o arquivo e identificar a primeira chave dupla;
-    //Utilizar o termo entre as chaves duplas e a chave de fechamento como nome das variáveis do objeto;
 
-    const obj = {};
-    Object.assign(obj, "lkjhasdjlasdk");
+    const regex = /{{(.+?)}}/g;
+    const resultados = text.matchAll(regex);
+    const nomeDasPropriedades = [];
+
+    for (const resultado of resultados) {
+      const nomeDaPropriedade = resultado[1];
+      nomeDasPropriedades.push(nomeDaPropriedade);
+    }
+
+    console.log(nomeDasPropriedades);
+
+    setNomePropriedades(nomeDasPropriedades);
   }
 
   return (<>
@@ -48,21 +65,21 @@ const HomeDoGi = () => {
       <link rel="icon" href="/favicon.ico" />
     </Head>
     <Box sx={{
-          m: 2
-        }}
+      m: 2
+    }}
     >
       <Card>
-        <CardHeader 
+        <CardHeader
           title={'Core'}
         />
-        <Divider/>
+        <Divider />
         <CardContent sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        }}
         >
-          <Box  sx={{
+          <Box sx={{
             display: 'flex',
             flexDirection: 'column',
             width: '50%',
@@ -70,11 +87,11 @@ const HomeDoGi = () => {
             p: 2
           }}>
             <div>
-              {textoDoContrato}  
+              {textoDoContrato}
             </div>
           </Box>
-        
-          <Box  sx={{
+
+          <Box sx={{
             width: '50%',
             p: 2,
             display: 'flex',
@@ -83,27 +100,30 @@ const HomeDoGi = () => {
             gap: 1
           }}>
 
-            <Button
-              fullWidth
-              variant='outlined'
-              component="label"
-              tipoDoBotao={'primario'}
-              endIcon={<AttachFile/>}
-            >
-              Upload File
-              <input
-                type="file"
-                hidden
-                onChange={event => handleUpload(event)}
-              />
-            </Button>
-            <Button
-              fullWidth
-              variant='contained'
-              onClick={() => substuirDadosDoContrato()}
-            >
-              Substituir dados
-            </Button>
+            <div>
+              {
+                nomePropriedades.length > 0 ? <FormBuilder textCallBack={handleTextCallBack} initialValues={nomePropriedades} /> : null
+              }
+            </div>
+            <div>
+              <Button
+                fullWidth
+                variant='outlined'
+                component="label"
+                tipoDoBotao={'primario'}
+                endIcon={<AttachFile />}
+              >
+                Upload File
+                <input
+                  type="file"
+                  hidden
+                  onChange={event => handleUpload(event)}
+                />
+              </Button>
+              <button onClick={e => handleUpload(null)}>
+                x
+              </button>
+            </div>
           </Box>
         </CardContent>
       </Card>
